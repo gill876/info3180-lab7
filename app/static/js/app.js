@@ -51,6 +51,45 @@ const NotFound = Vue.component('not-found', {
     }
 })
 
+const UploadForm = Vue.component('upload-form', {
+    template: `
+    <div class="row">
+        <div class="col">
+            <form id="uploadForm" @submit.prevent="uploadPhoto" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" class="form-control" id="description"  rows="3"></textarea>
+                </div>
+
+                <div class="custom-file">
+                    <input name="photo" type="file" class="custom-file-input" id="photo" >
+                    <label class="custom-file-label" for="photo">Choose Photo</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    `,
+    data: function () {
+        return {}
+    },
+
+    methods: {
+        uploadPhoto: function() {
+            let uploadForm = document.getElementById('uploadForm');
+            let form_data = new FormData(uploadForm);
+            fetch("/api/upload", { method: 'POST', body: form_data, headers: { 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
+                return response.json();
+                }).then(function (jsonResponse) {
+                    // display a success message
+                    console.log(jsonResponse);}).catch(function (error) {
+                        console.log(error);
+                    });
+        }
+    }
+})
+
 // Define Routes
 const router = new VueRouter({
     mode: 'history',

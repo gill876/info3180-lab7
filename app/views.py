@@ -14,26 +14,29 @@ import os
 ###
 # Routing for your application.
 ###/api/
-upload/api/
-upload
 
 @app.route('/api/upload', methods=['POST'])
 def upload():
     uploadform = UploadForm()
     message = "uh-oh"
-    if request.method == 'POST' and uploadform.validate_on_submit():
-        description = uploadform.description.data
-        photo = uploadform.photo.data
-        filename = secure_filename(photo.filename)
+    if request.method == 'POST':
+        uploadform.description.data = request.form['description']
+        uploadform.photo.data = request.files['photo']
+        
+        if uploadform.validate_on_submit():
+            photo = uploadform.photo.data
+            description = uploadform.description.data
+            filename = secure_filename(photo.filename)
 
-        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        message = [{"message": "File Upload Successful", "filename": filename, "description": description}]
-    else:
-        message = [{"errors": form_errors(uploadform)}]
+            message = [{"message": "File Upload Successful", "filename": filename, "description": description}]
+            message = jsonify(message=message)
+            return message
+    
+    message = [{"errors": form_errors(uploadform)}]
         
     message = jsonify(message=message)
-    
     return message
 
 
