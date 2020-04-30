@@ -12,6 +12,10 @@ Vue.component('app-header', {
           <li class="nav-item active">
             <router-link class="nav-link" to="/">Home <span class="sr-only">(current)</span></router-link>
           </li>
+
+          <li class="nav-item">
+            <router-link to="/upload" class="nav-link">Upload</router-link>
+          </li>
         </ul>
       </div>
     </nav>
@@ -57,16 +61,18 @@ const UploadForm = Vue.component('upload-form', {
         <div class="col">
             <form id="uploadForm" @submit.prevent="uploadPhoto" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea name="description" class="form-control" id="description"  rows="3"></textarea>
+                    <!--<label for="description">Description</label>-->
+                    <textarea name="description" class="form-control" id="description" placeholder="Description" rows="3"></textarea>
                 </div>
 
                 <div class="custom-file">
                     <input name="photo" type="file" class="custom-file-input" id="photo" >
                     <label class="custom-file-label" for="photo">Choose Photo</label>
                 </div>
-                
+                <hr>
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <br>
+                <br>
             </form>
         </div>
     </div>
@@ -96,7 +102,7 @@ const router = new VueRouter({
     routes: [
         {path: "/", component: Home},
         // Put other routes here
-
+        {path: "/upload", component: UploadForm},
         // This is a catch all route in case none of the above matches
         {path: "*", component: NotFound}
     ]
