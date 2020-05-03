@@ -61,7 +61,9 @@ const UploadForm = Vue.component('upload-form', {
         <div class="col">
             <div v-for="message in messages.message">
                 <div v-if="message.description">
-                    {{message.description}}
+                    <div class="alert alert-success" role="alert">
+                        {{message.message}}
+                    </div>
                 </div>
                 <div v-if="message.errors">
                     <div v-for="error in message.errors" class="alert alert-danger" role="alert">
