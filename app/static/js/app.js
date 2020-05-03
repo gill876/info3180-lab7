@@ -59,6 +59,16 @@ const UploadForm = Vue.component('upload-form', {
     template: `
     <div class="row">
         <div class="col">
+            <div v-for="message in messages.message">
+                <div v-if="message.description">
+                    {{message.description}}
+                </div>
+                <div v-if="message.errors">
+                    <div v-for="error in message.errors" class="alert alert-danger" role="alert">
+                        {{error}}
+                    </div>
+                </div>
+            </div>
             <form id="uploadForm" @submit.prevent="uploadPhoto" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <!--<label for="description">Description</label>-->
@@ -78,18 +88,23 @@ const UploadForm = Vue.component('upload-form', {
     </div>
     `,
     data: function () {
-        return {}
+        return {
+            messages: ''
+        }
     },
 
     methods: {
         uploadPhoto: function() {
+            let self = this;
             let uploadForm = document.getElementById('uploadForm');
             let form_data = new FormData(uploadForm);
             fetch("/api/upload", { method: 'POST', body: form_data, headers: { 'X-CSRFToken': token }, credentials: 'same-origin'}).then(function (response) {
                 return response.json();
                 }).then(function (jsonResponse) {
                     // display a success message
-                    console.log(jsonResponse);}).catch(function (error) {
+                    //console.log(jsonResponse);
+                    self.messages = jsonResponse;
+                }).catch(function (error) {
                         console.log(error);
                     });
         }
